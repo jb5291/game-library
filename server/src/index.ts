@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import gameRoutes from './routes/gameRoutes';
 import profileRoutes from './routes/profileRoutes';
+import collectionRoutes from './routes/collectionRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -37,6 +38,7 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/collections', collectionRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
