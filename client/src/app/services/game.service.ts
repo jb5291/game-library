@@ -11,16 +11,22 @@ export class GameService {
   
   // Create signals
   private gamesSignal = signal<Game[]>([]);
+  private filteredGamesSignal = signal<Game[]>([]);
   private loadingSignal = signal<boolean>(false);
   private errorSignal = signal<string | null>(null);
+  private searchTermSignal = signal<string>('');
+  private filterSignal = signal<string>('all'); // 'all', 'completed', 'in-progress'
   
   // Expose read-only signals
   readonly games = this.gamesSignal.asReadonly();
+  readonly filteredGames = this.filteredGamesSignal.asReadonly();
   readonly loading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
+  readonly searchTerm = this.searchTermSignal.asReadonly();
+  readonly filter = this.filterSignal.asReadonly();
   
   // Computed signal for games count
-  readonly gamesCount = computed(() => this.gamesSignal().length);
+  readonly gamesCount = computed(() => this.filteredGamesSignal().length);
 
   constructor(private http: HttpClient) {
     // Load games when service is initialized
@@ -36,12 +42,50 @@ export class GameService {
       // Convert Observable to Promise
       const games = await firstValueFrom(this.http.get<Game[]>(this.apiUrl));
       this.gamesSignal.set(games);
+      this.applyFilters(); // Apply any existing filters
     } catch (error: any) {
       console.error('Error fetching games:', error);
       this.errorSignal.set(error.message || 'Failed to load games');
     } finally {
       this.loadingSignal.set(false);
     }
+  }
+
+  // Set search term
+  setSearchTerm(term: string): void {
+    this.searchTermSignal.set(term);
+    this.applyFilters();
+  }
+
+  // Set filter
+  setFilter(filter: string): void {
+    this.filterSignal.set(filter);
+    this.applyFilters();
+  }
+
+  // Apply search and filters
+  private applyFilters(): void {
+    const searchTerm = this.searchTermSignal().toLowerCase().trim();
+    const filter = this.filterSignal();
+    let result = this.gamesSignal();
+    
+    // Apply search term filter
+    if (searchTerm) {
+      result = result.filter(game => 
+        game.title.toLowerCase().includes(searchTerm) ||
+        game.developer?.toLowerCase().includes(searchTerm) ||
+        game.genre?.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    // Apply completion status filter
+    if (filter === 'completed') {
+      result = result.filter(game => game.completed === true);
+    } else if (filter === 'in-progress') {
+      result = result.filter(game => game.completed === false);
+    }
+    
+    this.filteredGamesSignal.set(result);
   }
 
   // Get a single game
