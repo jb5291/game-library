@@ -1,0 +1,226 @@
+<div class="game-form-container">
+    <div class="game-form-card">
+      <h2>{{ isEditMode ? 'Edit Game' : 'Add New Game' }}</h2>
+      
+      @if (error() && !hasValidationErrors()) {
+        <div class="error-message">
+          {{ error() }}
+        </div>
+      }
+      
+      @if (hasValidationErrors()) {
+        <div class="error-message">
+          <ul>
+            @for (error of getValidationErrorMessages(); track $index) {
+              <li>{{ error }}</li>
+            }
+          </ul>
+        </div>
+      }
+      
+      <form (ngSubmit)="onSubmit()" #gameForm="ngForm">
+        <div class="form-group" [class.has-error]="validationErrors['title']">
+          <label for="title">Title*</label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            [(ngModel)]="game.title" 
+            required
+            [disabled]="loading()"
+          >
+          @if (validationErrors['title']) {
+            <div class="field-error">{{ validationErrors['title'] }}</div>
+          }
+        </div>
+        
+        <div class="form-group" [class.has-error]="validationErrors['description']">
+          <label for="description">Description*</label>
+          <textarea 
+            id="description" 
+            name="description" 
+            [(ngModel)]="game.description" 
+            required
+            [disabled]="loading()"
+            rows="4"
+          ></textarea>
+          @if (validationErrors['description']) {
+            <div class="field-error">{{ validationErrors['description'] }}</div>
+          }
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group" [class.has-error]="validationErrors['platform']">
+            <label for="platform">Platform*</label>
+            <select 
+              id="platform" 
+              name="platform" 
+              [(ngModel)]="game.platform" 
+              required
+              [disabled]="loading()"
+            >
+              <option value="" disabled>Select platform</option>
+              @for (platform of platforms; track platform) {
+                <option [value]="platform">{{ platform }}</option>
+              }
+            </select>
+            @if (validationErrors['platform']) {
+              <div class="field-error">{{ validationErrors['platform'] }}</div>
+            }
+          </div>
+          
+          <div class="form-group" [class.has-error]="validationErrors['genre']">
+            <label for="genre">Genre*</label>
+            <select 
+              id="genre" 
+              name="genre" 
+              [(ngModel)]="game.genre" 
+              required
+              [disabled]="loading()"
+            >
+              <option value="" disabled>Select genre</option>
+              @for (genre of genres; track genre) {
+                <option [value]="genre">{{ genre }}</option>
+              }
+            </select>
+            @if (validationErrors['genre']) {
+              <div class="field-error">{{ validationErrors['genre'] }}</div>
+            }
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group" [class.has-error]="validationErrors['releaseYear']">
+            <label for="releaseYear">Release Year*</label>
+            <select 
+              id="releaseYear" 
+              name="releaseYear" 
+              [(ngModel)]="game.releaseYear" 
+              required
+              [disabled]="loading()"
+            >
+              <option value="" disabled>Select year</option>
+              @for (year of years; track year) {
+                <option [value]="year">{{ year }}</option>
+              }
+            </select>
+            @if (validationErrors['releaseYear']) {
+              <div class="field-error">{{ validationErrors['releaseYear'] }}</div>
+            }
+          </div>
+          
+          <div class="form-group" [class.has-error]="validationErrors['rating']">
+            <label for="rating">Rating*</label>
+            <select 
+              id="rating" 
+              name="rating" 
+              [(ngModel)]="game.rating" 
+              required
+              [disabled]="loading()"
+            >
+              <option value="" disabled>Select rating</option>
+              @for (rating of ratings; track rating) {
+                <option [value]="rating">{{ rating }}</option>
+              }
+            </select>
+            @if (validationErrors['rating']) {
+              <div class="field-error">{{ validationErrors['rating'] }}</div>
+            }
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group" [class.has-error]="validationErrors['developer']">
+            <label for="developer">Developer*</label>
+            <input 
+              type="text" 
+              id="developer" 
+              name="developer" 
+              [(ngModel)]="game.developer" 
+              required
+              [disabled]="loading()"
+            >
+            @if (validationErrors['developer']) {
+              <div class="field-error">{{ validationErrors['developer'] }}</div>
+            }
+          </div>
+          
+          <div class="form-group" [class.has-error]="validationErrors['publisher']">
+            <label for="publisher">Publisher*</label>
+            <input 
+              type="text" 
+              id="publisher" 
+              name="publisher" 
+              [(ngModel)]="game.publisher" 
+              required
+              [disabled]="loading()"
+            >
+            @if (validationErrors['publisher']) {
+              <div class="field-error">{{ validationErrors['publisher'] }}</div>
+            }
+          </div>
+        </div>
+        
+        <div class="form-group" [class.has-error]="validationErrors['imageUrl']">
+          <label for="imageUrl">Image URL</label>
+          <input 
+            type="url" 
+            id="imageUrl" 
+            name="imageUrl" 
+            [(ngModel)]="game.imageUrl" 
+            [disabled]="loading()"
+          >
+          @if (validationErrors['imageUrl']) {
+            <div class="field-error">{{ validationErrors['imageUrl'] }}</div>
+          }
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <label>
+            <input 
+              type="checkbox" 
+              id="completed" 
+              name="completed" 
+              [(ngModel)]="game.completed" 
+              [disabled]="loading()"
+            >
+            Completed
+          </label>
+        </div>
+        
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea 
+            id="notes" 
+            name="notes" 
+            [(ngModel)]="game.notes" 
+            [disabled]="loading()"
+            rows="3"
+          ></textarea>
+        </div>
+        
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cancel()" 
+            [disabled]="loading()"
+          >
+            Cancel
+          </button>
+          
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="loading()"
+          >
+            @if (loading()) {
+              {{ isEditMode ? 'Updating...' : 'Creating...' }}
+            } @else {
+              {{ isEditMode ? 'Update Game' : 'Create Game' }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

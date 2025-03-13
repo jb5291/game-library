@@ -1,0 +1,139 @@
+<div class="game-detail-container">
+    @if (loading()) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading game details...</p>
+      </div>
+    } @else if (error()) {
+      <div class="error-message">
+        <h3>Error</h3>
+        <p>{{ error() }}</p>
+        <button class="btn btn-primary" routerLink="/games">Back to Games</button>
+      </div>
+    } @else if (game) {
+      <div class="game-detail-card">
+        <div class="game-header">
+          <h1>{{ game.title }}</h1>
+          <div class="game-status" [class.completed]="game.completed">
+            {{ game.completed ? 'Completed' : 'Not Completed' }}
+          </div>
+        </div>
+        
+        <div class="game-content">
+          <div class="game-image-container">
+            @if (game.imageUrl) {
+              <img [src]="game.imageUrl" [alt]="game.title" class="game-image">
+            } @else {
+              <div class="placeholder-image">
+                <span>No Image Available</span>
+              </div>
+            }
+            
+            @if (isAuthenticated()) {
+              <div class="game-actions">
+                <button class="btn btn-primary" (click)="toggleCompleted()">
+                  {{ game.completed ? 'Mark as Not Completed' : 'Mark as Completed' }}
+                </button>
+                <button class="btn btn-secondary" (click)="editGame()">
+                  Edit Game
+                </button>
+                <button class="btn btn-danger" (click)="confirmDelete()">
+                  Delete Game
+                </button>
+              </div>
+            }
+          </div>
+          
+          <div class="game-info">
+            <div class="info-section">
+              <h2>About</h2>
+              <p class="game-description">{{ game.description }}</p>
+            </div>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <h3>Platform</h3>
+                <p>{{ game.platform }}</p>
+              </div>
+              
+              <div class="info-item">
+                <h3>Genre</h3>
+                <p>{{ game.genre }}</p>
+              </div>
+              
+              <div class="info-item">
+                <h3>Release Year</h3>
+                <p>{{ game.releaseYear }}</p>
+              </div>
+              
+              <div class="info-item">
+                <h3>Rating</h3>
+                <div class="rating-display">
+                  <span class="rating-value">{{ game.rating }}/10</span>
+                  <div class="rating-stars">
+                    @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+                      <span class="star" [class.filled]="i <= game.rating">★</span>
+                    }
+                  </div>
+                </div>
+              </div>
+              
+              <div class="info-item">
+                <h3>Developer</h3>
+                <p>{{ game.developer }}</p>
+              </div>
+              
+              <div class="info-item">
+                <h3>Publisher</h3>
+                <p>{{ game.publisher }}</p>
+              </div>
+            </div>
+            
+            @if (game.notes) {
+              <div class="info-section">
+                <h2>Notes</h2>
+                <p class="game-notes">{{ game.notes }}</p>
+              </div>
+            }
+            
+            <div class="info-section dates">
+              <p class="date-info">
+                <span>Added on:</span> {{ formatDate(game.createdAt) }}
+              </p>
+              @if (game.updatedAt && game.updatedAt !== game.createdAt) {
+                <p class="date-info">
+                  <span>Last updated:</span> {{ formatDate(game.updatedAt) }}
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+        
+        <div class="back-link">
+          <a routerLink="/games">← Back to Games</a>
+        </div>
+      </div>
+      
+      <!-- Delete Confirmation Modal -->
+      @if (showDeleteConfirm) {
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete <strong>{{ game.title }}</strong>?</p>
+            <p class="warning">This action cannot be undone.</p>
+            
+            <div class="modal-actions">
+              <button class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+              <button class="btn btn-danger" (click)="deleteGame()">Delete</button>
+            </div>
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="not-found">
+        <h2>Game Not Found</h2>
+        <p>The game you're looking for doesn't exist or has been removed.</p>
+        <button class="btn btn-primary" routerLink="/games">Back to Games</button>
+      </div>
+    }
+  </div>

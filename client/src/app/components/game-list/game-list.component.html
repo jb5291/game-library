@@ -1,0 +1,59 @@
+<div class="game-list-container">
+    <h2>All Games @if (gamesCount() > 0) {<span>({{ gamesCount() }})</span>}</h2>
+    
+    @if (loading()) {
+      <div class="loading-spinner">
+        <p>Loading games...</p>
+      </div>
+    }
+    
+    @if (error()) {
+      <div class="error-message">
+        <p>{{ error() }}</p>
+      </div>
+    }
+    
+    @if (!loading() && !error() && games().length === 0) {
+      <div class="no-games">
+        <p>No games found. Add your first game!</p>
+        <a routerLink="/games/new" class="btn">Add Game</a>
+      </div>
+    }
+    
+    @if (!loading() && !error() && games().length > 0) {
+      <div class="game-grid">
+        @for (game of games(); track game._id) {
+          <div class="game-card">
+            <div class="game-image">
+              @if (game.imageUrl) {
+                <img [src]="game.imageUrl" [alt]="game.title">
+              } @else {
+                <div class="placeholder-image">No Image</div>
+              }
+            </div>
+            
+            <div class="game-info">
+              <h3>{{ game.title }}</h3>
+              <p class="game-developer">{{ game.developer }} ({{ game.releaseYear }})</p>
+              <p class="game-description">{{ game.description | slice:0:100 }}{{ game.description.length > 100 ? '...' : '' }}</p>
+              
+              <div class="game-meta">
+                <span class="game-genre">{{ game.genre }}</span>
+                <span class="game-rating">{{ game.rating }}/10</span>
+              </div>
+              
+              <div class="game-actions">
+                <a [routerLink]="['/games', game._id]" class="btn">View</a>
+                <a [routerLink]="['/games/edit', game._id]" class="btn">Edit</a>
+                <button (click)="deleteGame(game._id!)" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="no-games-message">
+            <p>No games match your criteria.</p>
+          </div>
+        }
+      </div>
+    }
+  </div>

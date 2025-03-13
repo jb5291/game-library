@@ -1,0 +1,147 @@
+.game-form-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  
+  .game-form-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 800px;
+    
+    h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      color: #333;
+      text-align: center;
+    }
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      
+      &:focus {
+        outline: none;
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+      }
+      
+      &:disabled {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+      }
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    &.has-error {
+      input, select, textarea {
+        border-color: #f44336;
+      }
+    }
+  }
+  
+  .checkbox-group {
+    label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      
+      input[type="checkbox"] {
+        width: auto;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    
+    .form-group {
+      flex: 1;
+    }
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  
+  .field-error {
+    color: #f44336;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    
+    ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+      
+      &.btn-primary {
+        background-color: #6c63ff;
+        color: white;
+        
+        &:hover:not(:disabled) {
+          background-color: #5a52d5;
+        }
+      }
+      
+      &.btn-secondary {
+        background-color: #e0e0e0;
+        color: #333;
+        
+        &:hover:not(:disabled) {
+          background-color: #d5d5d5;
+        }
+      }
+    }
+  }

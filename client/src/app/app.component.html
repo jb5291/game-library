@@ -1,0 +1,26 @@
+<div class="app-container">
+  <header class="app-header">
+    <h1>Game Library</h1>
+    <nav>
+      @if (isAuthenticated()) {
+        <a routerLink="/games" routerLinkActive="active">Games</a>
+        <a routerLink="/games/new" routerLinkActive="active">Add New Game</a>
+        <div class="user-menu">
+          <span class="username">{{ user()?.username }}</span>
+          <button (click)="logout()" class="btn-logout">Logout</button>
+        </div>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+      }
+    </nav>
+  </header>
+
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2025 Game Library App</p>
+  </footer>
+</div>
