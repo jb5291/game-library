@@ -8,7 +8,7 @@
       <div class="error-message">
         <h3>Error</h3>
         <p>{{ error() }}</p>
-        <button class="btn btn-primary" routerLink="/games">Back to Games</button>
+        <button class ="btn btn-primary" routerLink="/games">Back to Games</button>
       </div>
     } @else if (game) {
       <div class="game-detail-card">
@@ -34,12 +34,11 @@
                 <button class="btn btn-primary" (click)="toggleCompleted()">
                   {{ game.completed ? 'Mark as Not Completed' : 'Mark as Completed' }}
                 </button>
-                <button class="btn btn-secondary" (click)="editGame()">
-                  Edit Game
-                </button>
-                <button class="btn btn-danger" (click)="confirmDelete()">
-                  Delete Game
-                </button>
+                <a [routerLink]="['/games/edit', game._id]" class="btn btn-primary">Edit Game</a>
+                <button (click)="deleteGame()" class="btn btn-danger">Delete Game</button>
+                @if (game._id) {
+                  <app-add-to-collection [gameId]="game._id"></app-add-to-collection>
+                }
               </div>
             }
           </div>

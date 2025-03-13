@@ -7,6 +7,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileGamesComponent } from './components/profile-games/profile-games.component';
 import { authGuard } from './guards/auth.guard';
+import { CollectionsListComponent } from './components/collections/collections-list/collections-list.component';
+import { CollectionFormComponent } from './components/collections/collection-form/collection-form.component';
+import { CollectionDetailComponent } from './components/collections/collection-detail/collection-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/games', pathMatch: 'full' },
@@ -18,5 +21,9 @@ export const routes: Routes = [
   { path: 'games/:id', component: GameDetailComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'profile/games', component: ProfileGamesComponent, canActivate: [authGuard] },
+  { path: 'collections', component: CollectionsListComponent, canActivate: [authGuard] },
+  { path: 'collections/new', component: CollectionFormComponent, canActivate: [authGuard] },
+  { path: 'collections/edit/:id', component: CollectionFormComponent, canActivate: [authGuard] },
+  { path: 'collections/:id', component: CollectionDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/games' }
 ];

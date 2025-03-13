@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { Game } from '../../models/game';
 import { AuthService } from '../../services/auth.service';
+import { AddToCollectionComponent } from '../collections/add-to-collection/add-to-collection.component';
 
 @Component({
   selector: 'app-game-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AddToCollectionComponent],
   templateUrl: './game-detail.component.html',
   styleUrl: './game-detail.component.scss'
 })

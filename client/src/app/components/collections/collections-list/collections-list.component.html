@@ -1,0 +1,60 @@
+<div class="collections-container">
+  <div class="collections-header">
+    <h1>My Collections</h1>
+    <a routerLink="/collections/new" class="btn btn-primary">Create New Collection</a>
+  </div>
+  
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading collections...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <h3>Error</h3>
+      <p>{{ error() }}</p>
+    </div>
+  } @else {
+    @if (collections().length === 0) {
+      <div class="no-collections">
+        <p>You haven't created any collections yet.</p>
+        <a routerLink="/collections/new" class="btn btn-primary">Create Your First Collection</a>
+      </div>
+    } @else {
+      <div class="collections-grid">
+        @for (collection of collections(); track collection._id) {
+          <div class="collection-card">
+            <a [routerLink]="['/collections', collection._id]" class="collection-link">
+              <div class="collection-cover">
+                @if (collection.coverImage) {
+                  <img [src]="collection.coverImage" alt="{{ collection.name }}">
+                } @else {
+                  <div class="cover-placeholder">
+                    <span>{{ collection.name.charAt(0).toUpperCase() }}</span>
+                  </div>
+                }
+                
+                @if (collection.isPublic) {
+                  <div class="public-badge">Public</div>
+                }
+              </div>
+              
+              <div class="collection-info">
+                <h3>{{ collection.name }}</h3>
+                @if (collection.description) {
+                  <p class="description">{{ collection.description }}</p>
+                }
+                <p class="game-count">{{ collection.games.length }} games</p>
+              </div>
+            </a>
+            
+            <div class="collection-actions">
+              <a [routerLink]="['/collections/edit', collection._id]" class="btn btn-secondary">Edit</a>
+              <button class="btn btn-danger" (click)="deleteCollection(collection._id, $event)">Delete</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div> 

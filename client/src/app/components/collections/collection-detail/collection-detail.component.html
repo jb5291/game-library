@@ -1,0 +1,76 @@
+<div class="collection-detail-container">
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading collection...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <h3>Error</h3>
+      <p>{{ error() }}</p>
+    </div>
+  } @else if (collection()) {
+    <div class="collection-header">
+      <div class="header-content">
+        <h1>{{ collection()!.name }}</h1>
+        @if (collection()!.isPublic) {
+          <span class="public-badge">Public</span>
+        }
+        @if (collection()!.description) {
+          <p class="description">{{ collection()!.description }}</p>
+        }
+      </div>
+      
+      <div class="header-actions">
+        <a [routerLink]="['/collections/edit', collection()!._id]" class="btn btn-primary">Edit Collection</a>
+        <a routerLink="/collections" class="btn btn-secondary">Back to Collections</a>
+      </div>
+    </div>
+    
+    <div class="collection-content">
+      <div class="games-header">
+        <h2>Games in this Collection ({{ collection()!.games.length }})</h2>
+        <a [routerLink]="['/collections', collection()!._id, 'add-games']" class="btn btn-success">Add Games</a>
+      </div>
+      
+      @if (collection()!.games.length === 0) {
+        <div class="no-games">
+          <p>This collection doesn't have any games yet.</p>
+          <a [routerLink]="['/collections', collection()!._id, 'add-games']" class="btn btn-primary">Add Games to Collection</a>
+        </div>
+      } @else {
+        <div class="games-grid">
+          @for (game of collection()!.games; track game._id) {
+            <div class="game-card">
+              <div class="game-image">
+                @if (game.imageUrl) {
+                  <img [src]="game.imageUrl" [alt]="game.title">
+                } @else {
+                  <div class="image-placeholder">
+                    <span>{{ game.title.charAt(0).toUpperCase() }}</span>
+                  </div>
+                }
+              </div>
+              
+              <div class="game-info">
+                <h3>{{ game.title }}</h3>
+                <p class="game-details">{{ game.developer }} ({{ game.releaseYear }})</p>
+              </div>
+              
+              <div class="game-actions">
+                <a [routerLink]="['/games', game._id]" class="btn btn-primary">View Details</a>
+                <button class="btn btn-danger" (click)="removeGame(game._id)">Remove</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="not-found">
+      <h2>Collection Not Found</h2>
+      <p>The collection you're looking for doesn't exist or has been removed.</p>
+      <a routerLink="/collections" class="btn btn-primary">Back to Collections</a>
+    </div>
+  }
+</div> 

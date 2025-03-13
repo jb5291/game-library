@@ -1,0 +1,86 @@
+<div class="collection-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Collection' : 'Create New Collection' }}</h1>
+    <a routerLink="/collections" class="back-link">Back to Collections</a>
+  </div>
+  
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>{{ isEditMode ? 'Loading collection...' : 'Creating collection...' }}</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <h3>Error</h3>
+      <p>{{ error() }}</p>
+    </div>
+  } @else {
+    <form (ngSubmit)="saveCollection()" class="collection-form">
+      <div class="form-group">
+        <label for="name">Collection Name*</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          [(ngModel)]="collectionForm.name" 
+          required
+          class="form-control"
+          placeholder="My Favorite RPGs"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          [(ngModel)]="collectionForm.description" 
+          class="form-control"
+          rows="3"
+          placeholder="A collection of my favorite role-playing games"
+        ></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="coverImage">Cover Image URL</label>
+        <input 
+          type="text" 
+          id="coverImage" 
+          name="coverImage" 
+          [(ngModel)]="collectionForm.coverImage" 
+          class="form-control"
+          placeholder="https://example.com/image.jpg"
+        >
+        
+        @if (collectionForm.coverImage) {
+          <div class="image-preview">
+            <img [src]="collectionForm.coverImage" alt="Cover preview">
+          </div>
+        }
+      </div>
+      
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="isPublic" 
+          name="isPublic" 
+          [(ngModel)]="collectionForm.isPublic" 
+          class="form-check-input"
+        >
+        <label class="form-check-label" for="isPublic">
+          Make this collection public
+        </label>
+        <small class="form-text text-muted">
+          Public collections can be viewed by other users
+        </small>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="!collectionForm.name">
+          {{ isEditMode ? 'Update Collection' : 'Create Collection' }}
+        </button>
+        <a routerLink="/collections" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  }
+</div> 
