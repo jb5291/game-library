@@ -4,6 +4,8 @@ import { GameDetailComponent } from './components/game-detail/game-detail.compon
 import { GameFormComponent } from './components/game-form/game-form.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileGamesComponent } from './components/profile-games/profile-games.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -14,5 +16,7 @@ export const routes: Routes = [
   { path: 'games/new', component: GameFormComponent, canActivate: [authGuard] },
   { path: 'games/edit/:id', component: GameFormComponent, canActivate: [authGuard] },
   { path: 'games/:id', component: GameDetailComponent, canActivate: [authGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'profile/games', component: ProfileGamesComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/games' }
 ];

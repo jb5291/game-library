@@ -1,0 +1,110 @@
+<div class="profile-container">
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading profile...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <h3>Error</h3>
+      <p>{{ error() }}</p>
+    </div>
+  } @else if (profile()) {
+    <div class="profile-card">
+      <div class="profile-header">
+        <h1>My Profile</h1>
+        @if (!isEditMode) {
+          <button class="btn btn-primary" (click)="toggleEditMode()">Edit Profile</button>
+        }
+      </div>
+      
+      @if (!isEditMode) {
+        <div class="profile-details">
+          <div class="profile-avatar">
+            @if (profile()?.avatarUrl) {
+              <img [src]="profile()?.avatarUrl" alt="Profile avatar">
+            } @else {
+              <div class="avatar-placeholder">
+                @if (profile()?.username) {
+                  {{ profile()!.username.charAt(0).toUpperCase() }}
+                } @else {
+                  U
+                }
+              </div>
+            }
+          </div>
+          
+          <div class="profile-info">
+            <p><strong>Username:</strong> {{ profile()?.username }}</p>
+            <p><strong>Email:</strong> {{ profile()?.email }}</p>
+            <p><strong>Member Since:</strong> {{ profile()?.createdAt | date }}</p>
+            @if (profile()?.bio) {
+              <p><strong>Bio:</strong> {{ profile()?.bio }}</p>
+            }
+          </div>
+        </div>
+        
+        <div class="profile-actions">
+          <a routerLink="/profile/games" class="btn btn-secondary">View My Games</a>
+        </div>
+      } @else {
+        <form (ngSubmit)="saveProfile()" class="profile-edit-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              [(ngModel)]="editForm.username" 
+              required
+              class="form-control"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              [(ngModel)]="editForm.email" 
+              required
+              class="form-control"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea 
+              id="bio" 
+              name="bio" 
+              [(ngModel)]="editForm.bio" 
+              class="form-control"
+              rows="3"
+            ></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="avatarUrl">Avatar URL</label>
+            <input 
+              type="text" 
+              id="avatarUrl" 
+              name="avatarUrl" 
+              [(ngModel)]="editForm.avatarUrl" 
+              class="form-control"
+            >
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">Cancel</button>
+          </div>
+        </form>
+      }
+    </div>
+  } @else {
+    <div class="no-profile">
+      <p>No profile information available.</p>
+    </div>
+  }
+</div> 

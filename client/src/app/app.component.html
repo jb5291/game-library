@@ -5,6 +5,7 @@
       @if (isAuthenticated()) {
         <a routerLink="/games" routerLinkActive="active">Games</a>
         <a routerLink="/games/new" routerLinkActive="active">Add New Game</a>
+        <a routerLink="/profile" routerLinkActive="active">My Profile</a>
         <div class="user-menu">
           <span class="username">{{ user()?.username }}</span>
           <button (click)="logout()" class="btn-logout">Logout</button>
