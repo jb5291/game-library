@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import gameRoutes from './routes/gameRoutes';
+import profileRoutes from './routes/profileRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ connectDB();
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/games', gameRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {

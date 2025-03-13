@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Game, { IGame } from '../models/Game';
+import { AuthRequest } from '../middleware/authMiddleware';
 
 // Get all games
 export const getGames = async (req: Request, res: Response): Promise<void> => {
@@ -26,47 +27,28 @@ export const getGameById = async (req: Request, res: Response): Promise<void> =>
 };
 
 // Create a new game
-export const createGame = async (req: Request, res: Response): Promise<void> => {
+export const createGame = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { 
-      title, 
-      description, 
-      genre, 
-      platform, 
-      releaseYear, 
-      developer, 
-      publisher, 
-      rating, 
-      imageUrl,
-      completed,
-      notes
-    } = req.body;
-
-    // Create new game with all fields
-    const newGame = new Game({
-      title,
-      description,
-      genre,
-      platform,
-      releaseYear,
-      developer,
-      publisher,
-      rating,
-      imageUrl,
-      completed: completed || false,
-      notes: notes || ''
-    });
-
-    // Save the game
-    await newGame.save();
+    const userId = req.user?.id;
     
-    res.status(201).json(newGame);
-  } catch (error: any) {
+    if (!userId) {
+      res.status(401).json({ message: 'User not authenticated' });
+      return;
+    }
+    
+    // Add the user ID to the game data
+    const gameData = {
+      ...req.body,
+      user: userId  // This is the critical line
+    };
+    
+    const game = new Game(gameData);
+    await game.save();
+    
+    res.status(201).json(game);
+  } catch (error) {
     console.error('Error creating game:', error);
-    res.status(500).json({ 
-      message: 'Error creating game', 
-      error: error.message 
-    });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 

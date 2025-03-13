@@ -6,12 +6,13 @@ import {
   updateGame, 
   deleteGame 
 } from '../controllers/gameController';
+import { protect } from '../middleware/authMiddleware';
 
 const router = Router();
 
 router.get('/', getGames);
 router.get('/:id', getGameById);
-router.post('/', createGame);
+router.post('/', protect, createGame);
 router.put('/:id', updateGame);
 router.delete('/:id', deleteGame);
 
