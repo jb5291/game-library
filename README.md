@@ -61,12 +61,6 @@ A RESTful API for managing your video game collection. Built with Node.js, Expre
 
 - **Authentication**: JWT (JSON Web Tokens)
 
-- **Validation**: Joi
-
-- **Documentation**: Swagger/OpenAPI
-
-- **Testing**: Jest
-
 - **Containerization**: Docker
 
 ## 🚀 Getting Started
